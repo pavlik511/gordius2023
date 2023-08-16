@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
-import { Slot, usePathname, router } from "expo-router";
-import { StatusBar, Dimensions, View, Image, Pressable } from "react-native";
+import { Slot, usePathname } from "expo-router";
+import { StatusBar, Dimensions, View } from "react-native";
 import Menu from "../components/Menu";
 
 export default function HomeLayout() {
   const [height, setHeight] = useState<number>(Dimensions.get("screen").height);
   const [width, setWidth] = useState(Dimensions.get("screen").width);
-  const path = usePathname()
 
+ const path = usePathname();
   useEffect(() => {
+    console.log(path)
     const subscription = Dimensions.addEventListener(
       "change",
       ({ window, screen }) => {
@@ -23,35 +24,13 @@ export default function HomeLayout() {
   return (
     <>
       <StatusBar hidden={true} />
-      <View
-        style={{
-          flexDirection: "row",
-          width,
-          height,
-        }}
-      >
-        
+      <View style={{
+        flexDirection:"row"
+      }}>
         {
-          path === "/" ? 
-            <Pressable style={{
-              width:"100%",
-              height:"100%"
-            }}
-            onPress={
-              ()=>{
-                router.replace("/indikace")
-              }
-            }
-            >
-          <Image 
-          style={{
-            width:"100%",
-            height:"100%",
-            resizeMode:"contain"
-          }}
-          source={require("../assets/splash.png")}/></Pressable>: 
-          <>
-          <Menu />
+          path !== "/" && <Menu />
+        }
+     
         <View
           style={{
             flex: 8,
@@ -59,10 +38,7 @@ export default function HomeLayout() {
         >
           <Slot />
         </View>
-          </>
-        }
-        
-      </View>
+        </View>
     </>
   );
 }
